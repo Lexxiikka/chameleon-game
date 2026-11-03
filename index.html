@@ -1,0 +1,1769 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Хамелеоны</title>
+  <link rel="icon" type="image/png" href="assets/icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Comfortaa:wght@300..700&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      box-sizing: border-box;
+      padding-top: env(safe-area-inset-top, 0px);
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+      --bg: #f6f5f0;
+      --card: #fff;
+      --text: #222;
+      --muted: #666;
+      --line: #ddd;
+      --accent: #2f6fed;
+      --accent-text: #fff;
+      --ok: #1f7a3a;
+      color-scheme: light;
+    }
+
+    @media (prefers-color-scheme:dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #1b1c1e;
+        --card: #26282b;
+        --text: #eee;
+        --muted: #a0a4a8;
+        --line: #3a3d41;
+        --accent: #5b8cff;
+        --accent-text: #0b1020;
+        --ok: #5fd18a;
+        color-scheme: dark
+      }
+    }
+
+    :root[data-theme="dark"] {
+      --bg: #1b1c1e;
+      --card: #26282b;
+      --text: #eee;
+      --muted: #a0a4a8;
+      --line: #3a3d41;
+      --accent: #5b8cff;
+      --accent-text: #0b1020;
+      --ok: #5fd18a;
+      color-scheme: dark
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    html {
+      height: 100%
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow-x: hidden;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Comfortaa", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.4
+    }
+
+    main {
+      max-width: 760px;
+      width: 100%;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      margin: 0 auto;
+      padding: 110px 16px 84px;
+      transition: padding 0.4s cubic-bezier(0.4, 0, 0.2, 1)
+    }
+
+    #top-header {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 30;
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease
+    }
+
+    .head-container {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 64px 16px 0;
+      position: relative
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      margin: 0 0 6px
+    }
+
+    .themebtn {
+      position: absolute;
+      top: calc(env(safe-area-inset-top, 0px) + 12px);
+      left: 12px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      padding: 0;
+      font-size: 1.2rem;
+      z-index: 40
+    }
+
+    footer {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      padding: 14px 16px;
+      border-top: 1px solid var(--line);
+      background: var(--card);
+      z-index: 10;
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease
+    }
+
+    body.playing #top-header {
+      transform: translateY(-100%);
+      opacity: 0;
+      pointer-events: none
+    }
+
+    body.playing footer {
+      transform: translateY(100%);
+      opacity: 0;
+      pointer-events: none
+    }
+
+    body.playing main {
+      padding: calc(env(safe-area-inset-top, 0px) + 20px) 16px calc(env(safe-area-inset-bottom, 0px) + 20px)
+    }
+
+    p.lead {
+      color: var(--muted);
+      margin: 0 0 18px
+    }
+
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 18px
+    }
+
+    .hidden,
+    [hidden] {
+      display: none !important
+    }
+
+    .fields {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 12px;
+      margin-bottom: 14px
+    }
+
+    label {
+      display: block;
+      font-size: .9rem;
+      color: var(--muted)
+    }
+
+    label b {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text);
+      margin-bottom: 4px
+    }
+
+    input[type=number] {
+      width: 100%;
+      font-family: inherit;
+      font-size: 1.1rem;
+      padding: 8px 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--text)
+    }
+
+    button {
+      font: inherit;
+      cursor: pointer;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      background: var(--card);
+      color: var(--text);
+      padding: 9px 14px;
+      transition: background-color .25s, opacity .25s, border-color .25s, transform .2s ease
+    }
+
+    button.primary {
+      background: var(--accent);
+      color: var(--accent-text);
+      border-color: var(--accent);
+      font-weight: 600
+    }
+
+    button.primary.rev-mode-btn {
+      background: #9d00ff;
+      border-color: #9d00ff;
+    }
+
+    button:disabled {
+      opacity: .45;
+      cursor: not-allowed
+    }
+
+    button.off {
+      opacity: .45;
+      cursor: not-allowed;
+      transform: none !important
+    }
+
+    .err {
+      color: #d33;
+      min-height: 1.3em;
+      margin: 0 0 10px;
+      font-size: .95rem
+    }
+
+    .status {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px
+    }
+
+    #game {
+      display: flex;
+      flex-direction: column;
+      flex: 1
+    }
+
+    .game-footer {
+      margin-top: auto;
+      padding-top: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 20px
+    }
+
+    .card {
+      background: transparent;
+      border: none;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      font-family: inherit;
+      -webkit-appearance: none;
+      transition: transform .2s ease;
+      outline: none;
+      border-radius: 16px;
+      height: 100%
+    }
+
+    .card:hover:not(.off):not(:disabled) {
+      transform: translateY(-6px)
+    }
+
+    .card:focus-visible {
+      background: rgba(128, 128, 128, 0.1)
+    }
+
+    .card.off {
+      opacity: 0.4;
+      cursor: not-allowed;
+      transform: none !important
+    }
+
+    .card h2 {
+      display: none
+    }
+
+    .herd {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2px;
+      height: 290px;
+      width: 100%;
+      align-content: flex-start;
+      transition: opacity 0.3s ease
+    }
+
+    .herd svg {
+      width: 34px;
+      height: 26px;
+      filter: drop-shadow(0 0 1px rgba(128, 128, 128, .9))
+    }
+
+    .more {
+      font-size: .9rem;
+      color: var(--muted);
+      align-self: center;
+      margin-left: 4px
+    }
+
+    .hint {
+      font-size: .85rem;
+      color: var(--muted)
+    }
+
+    @keyframes numUpdate {
+      0% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.3);
+        text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    .num-update {
+      animation: numUpdate 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .big-number {
+      font-size: 4.5rem;
+      font-weight: 800;
+      line-height: 1;
+      margin-top: auto;
+      font-variant-numeric: tabular-nums;
+      transition: color .4s ease, transform 0.2s ease;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, .15);
+      display: inline-block
+    }
+
+    .color-name {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-top: 4px;
+      transition: color .4s ease;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, .15)
+    }
+
+    .win {
+      margin-top: 24px;
+      padding: 14px;
+      border-radius: 12px;
+      border: 1px solid var(--ok);
+      color: var(--ok);
+      font-weight: 600;
+      text-align: center
+    }
+
+    .win.rev {
+      border-color: #d1124f;
+      color: #d1124f
+    }
+
+    @media (prefers-color-scheme:dark) {
+      :root:not([data-theme="light"]) .win.rev {
+        border-color: #ff6b9a;
+        color: #ff6b9a
+      }
+    }
+
+    :root[data-theme="dark"] .win.rev {
+      border-color: #ff6b9a;
+      color: #ff6b9a
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 16px;
+      justify-content: center;
+      flex-wrap: wrap
+    }
+
+    .rules {
+      font-size: .9rem;
+      color: var(--muted);
+      text-align: center;
+      margin: 0
+    }
+
+    .slot {
+      position: relative
+    }
+
+    .slothead {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 6px;
+      font-weight: 600
+    }
+
+    .dotbtn {
+      width: 38px;
+      height: 30px;
+      border: none;
+      background: transparent;
+      padding: 0;
+      flex: none;
+      transition: transform .3s ease;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center
+    }
+
+    .dotbtn svg {
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15))
+    }
+
+    .dotbtn:hover {
+      transform: scale(1.1)
+    }
+
+    .sw {
+      width: 34px;
+      height: 26px;
+      border: none;
+      background: transparent;
+      padding: 0;
+      border-radius: 4px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center
+    }
+
+    .sw svg {
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15))
+    }
+
+    .sw.sel {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px
+    }
+
+    .sw.taken {
+      cursor: not-allowed;
+      opacity: 1;
+    }
+
+    .pop {
+      position: absolute;
+      left: 0;
+      top: 42px;
+      z-index: 20;
+      display: flex;
+      gap: 6px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 10px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, .25)
+    }
+
+    .pop .col {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      border: 2px solid transparent;
+      border-radius: 18px;
+      padding: 2px;
+      transition: border-color .2s ease
+    }
+
+    .pop .col.taken-group:hover {
+      border-color: #d33
+    }
+
+    .tip {
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(4px);
+      transition: opacity .22s ease, transform .22s ease, visibility 0s linear .22s
+    }
+
+    .tip.show {
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+      transition: opacity .22s ease, transform .22s ease, visibility 0s
+    }
+
+    #sn0,
+    #sn1,
+    #sn2 {
+      display: inline-block;
+      will-change: opacity, transform, filter
+    }
+
+    .text-blur-out {
+      animation: blurOut .22s cubic-bezier(.4, 0, .2, 1) forwards
+    }
+
+    .text-blur-in {
+      animation: blurIn .25s cubic-bezier(0, 0, .2, 1) forwards
+    }
+
+    @keyframes blurOut {
+      from {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0)
+      }
+
+      to {
+        opacity: 0;
+        transform: translateY(-4px);
+        filter: blur(4px)
+      }
+    }
+
+    @keyframes blurIn {
+      from {
+        opacity: 0;
+        transform: translateY(4px);
+        filter: blur(4px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0)
+      }
+    }
+
+    .fly-layer {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 100;
+      overflow: hidden
+    }
+
+    .flying-cham {
+      position: fixed;
+      width: 34px;
+      height: 26px;
+      filter: drop-shadow(0 4px 10px rgba(0, 0, 0, .45));
+      transition: left .55s cubic-bezier(.25, 1, .5, 1), top .55s cubic-bezier(.25, 1, .5, 1), color .55s ease, transform .55s ease;
+      will-change: left, top, color, transform;
+    }
+
+    .flying-cham svg {
+      width: 100%;
+      height: 100%
+    }
+
+    .game-bg {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      opacity: 0.18;
+      transition: opacity .5s ease, background .5s ease
+    }
+
+    .game-bg.hidden {
+      opacity: 0;
+      pointer-events: none
+    }
+
+    @media (prefers-color-scheme:dark) {
+      :root:not([data-theme="light"]) .game-bg {
+        opacity: 0.25
+      }
+    }
+
+    :root[data-theme="dark"] .game-bg {
+      opacity: 0.25
+    }
+
+    .theming,
+    .theming * {
+      transition: background-color .4s ease, color .4s ease, border-color .4s ease, box-shadow .4s ease !important
+    }
+
+    #revtag .ch {
+      display: inline-block;
+      white-space: pre;
+      opacity: 0;
+      transform: translateX(-5px);
+      transition: opacity .25s ease, transform .25s ease
+    }
+
+    #revtag .ch.on {
+      opacity: 1;
+      transform: none
+    }
+
+    .pop {
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-8px) scale(.96);
+      transform-origin: top left;
+      transition: opacity .2s ease, transform .2s ease, visibility 0s linear .2s
+    }
+
+    .pop.open {
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+      transition: opacity .2s ease, transform .2s ease, visibility 0s
+    }
+
+    .enter {
+      animation: secIn .35s ease both
+    }
+
+    .leaving {
+      animation: secOut .22s ease forwards
+    }
+
+    @keyframes secIn {
+      from {
+        opacity: 0;
+        transform: translateY(12px)
+      }
+
+      to {
+        opacity: 1;
+        transform: none
+      }
+    }
+
+    @keyframes secOut {
+      from {
+        opacity: 1;
+        transform: none
+      }
+
+      to {
+        opacity: 0;
+        transform: translateY(-8px)
+      }
+    }
+
+    .overlay {
+      overflow: hidden
+    }
+
+    .overlay.opening {
+      animation: ovIn .3s ease both
+    }
+
+    .overlay.closing {
+      animation: ovOut .35s ease both
+    }
+
+    .modal.in {
+      animation: mIn .4s cubic-bezier(.2, .8, .2, 1) both
+    }
+
+    .modal.out-up {
+      animation: outUp .35s ease-in both
+    }
+
+    .modal.out-down {
+      animation: outDown .35s ease-in both
+    }
+
+    .modal.out-left {
+      animation: outLeft .35s ease-in both
+    }
+
+    .modal.out-right {
+      animation: outRight .35s ease-in both
+    }
+
+    @keyframes ovIn {
+      from {
+        background: rgba(0, 0, 0, 0)
+      }
+
+      to {
+        background: rgba(0, 0, 0, .5)
+      }
+    }
+
+    @keyframes ovOut {
+      from {
+        background: rgba(0, 0, 0, .5)
+      }
+
+      to {
+        background: rgba(0, 0, 0, 0)
+      }
+    }
+
+    @keyframes mIn {
+      from {
+        transform: translateY(100vh)
+      }
+
+      to {
+        transform: none
+      }
+    }
+
+    @keyframes outUp {
+      to {
+        transform: translateY(-100vh)
+      }
+    }
+
+    @keyframes outDown {
+      to {
+        transform: translateY(100vh)
+      }
+    }
+
+    @keyframes outLeft {
+      to {
+        transform: translateX(-100vw)
+      }
+    }
+
+    @keyframes outRight {
+      to {
+        transform: translateX(100vw)
+      }
+    }
+
+    @media (prefers-reduced-motion:reduce) {
+      * {
+        animation-duration: .01ms !important;
+        transition-duration: .01ms !important
+      }
+    }
+
+    .tip {
+      position: fixed;
+      z-index: 60;
+      max-width: 240px;
+      background: #222;
+      color: #fff;
+      font-size: .85rem;
+      padding: 6px 10px;
+      border-radius: 8px;
+      pointer-events: none;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, .35)
+    }
+
+    /* Анимация CSS Grid для плавного расширения блока */
+    .startbox {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 10px;
+    }
+
+    .rev-warning-wrap {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      width: 100%;
+      text-align: center;
+    }
+
+    .rev-warning-wrap.show {
+      grid-template-rows: 1fr;
+    }
+
+    .rev-warning {
+      overflow: hidden;
+      color: #d1124f;
+      font-weight: 600;
+      font-size: 0.95rem;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+
+    .rev-warning-wrap.show .rev-warning {
+      opacity: 1;
+      transition: opacity 0.4s ease 0.1s;
+    }
+
+    .rev-warning-text {
+      padding-top: 12px;
+      /* Создаёт отступ от кнопки без резких скачков gap */
+    }
+
+    @media (prefers-color-scheme:dark) {
+      :root:not([data-theme="light"]) .rev-warning {
+        color: #ff6b9a
+      }
+    }
+
+    :root[data-theme="dark"] .rev-warning {
+      color: #ff6b9a
+    }
+
+    .revbox {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer
+    }
+
+    .revbox input {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 22px;
+      height: 22px;
+      margin: 0;
+      flex: none;
+      border: 2px solid var(--line);
+      border-radius: 6px;
+      background: var(--bg);
+      display: grid;
+      place-content: center;
+      cursor: pointer
+    }
+
+    .revbox input:checked {
+      background: var(--accent);
+      border-color: var(--accent)
+    }
+
+    .revbox input:checked::after {
+      content: "";
+      width: 6px;
+      height: 11px;
+      border: solid var(--accent-text);
+      border-width: 0 3px 3px 0;
+      transform: rotate(45deg) translate(-1px, -1px)
+    }
+
+    .revbox input:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px
+    }
+
+    input[type=number] {
+      -moz-appearance: textfield;
+      appearance: textfield
+    }
+
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0
+    }
+
+    .num {
+      display: flex;
+      gap: 6px;
+      align-items: stretch
+    }
+
+    .num input {
+      flex: 1;
+      width: auto;
+      min-width: 0;
+      text-align: center
+    }
+
+    .step {
+      width: 40px;
+      flex: none;
+      padding: 0;
+      font-size: 1.3rem;
+      line-height: 1
+    }
+
+    .fbtn {
+      width: 48px;
+      height: 48px;
+      padding: 0;
+      background: transparent;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform .2s ease;
+      border-radius: 0;
+    }
+
+    .fbtn:hover {
+      transform: scale(1.1)
+    }
+
+    .fbtn img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block
+    }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 50
+    }
+
+    .modal {
+      background: var(--card);
+      color: var(--text);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      max-width: 520px;
+      width: 100%;
+      max-height: 85vh;
+      overflow: auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column
+    }
+
+    .modal h2 {
+      margin: 0 0 10px;
+      font-size: 1.2rem
+    }
+
+    .modal p {
+      margin: 0 0 10px
+    }
+
+    .modal a {
+      color: var(--accent)
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 18px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="game-bg" class="game-bg hidden"></div>
+
+  <header id="top-header">
+    <button id="themebtn" class="themebtn" type="button" aria-label="Сменить тему"></button>
+    <div class="head-container">
+      <h1>Хамелеоны<span id="revtag"></span></h1>
+    </div>
+  </header>
+
+  <main>
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+      <symbol id="cham" viewBox="0 0 44 30">
+        <path d="M 13 16 C 4 19, 1 10, 5 5 C 9 1, 14 5, 12 9 C 11 11.5, 8.5 10.5, 9 9" fill="none" stroke="currentColor"
+          stroke-width="3.5" stroke-linecap="round" />
+        <path d="M 17 18 L 15 25 M 29 18 L 31 25" fill="none" stroke="currentColor" stroke-width="3.5"
+          stroke-linecap="round" />
+        <path d="M 11 15 C 11 7, 24 6, 30 8 C 33 4, 39 5, 40 10.5 C 41 15, 37 18, 32 18 C 24 19.5, 13 19, 11 15 Z"
+          fill="currentColor" />
+        <circle cx="34.5" cy="11" r="3.2" fill="#fff" />
+        <circle cx="35" cy="11" r="1.4" fill="#111" />
+      </symbol>
+    </svg>
+
+    <section id="setup" class="panel">
+      <div class="fields">
+        <div class="slot">
+          <div class="slothead"><button type="button" class="dotbtn" id="dot0" aria-label="Выбрать цвет"
+              title="Выбрать цвет"></button><span id="sn0"></span></div><label><input type="number" id="n0" min="0"
+              step="1" value="13"></label>
+          <div class="pop" id="pal0"></div>
+        </div>
+        <div class="slot">
+          <div class="slothead"><button type="button" class="dotbtn" id="dot1" aria-label="Выбрать цвет"
+              title="Выбрать цвет"></button><span id="sn1"></span></div><label><input type="number" id="n1" min="0"
+              step="1" value="15"></label>
+          <div class="pop" id="pal1"></div>
+        </div>
+        <div class="slot">
+          <div class="slothead"><button type="button" class="dotbtn" id="dot2" aria-label="Выбрать цвет"
+              title="Выбрать цвет"></button><span id="sn2"></span></div><label><input type="number" id="n2" min="0"
+              step="1" value="17"></label>
+          <div class="pop" id="pal2"></div>
+        </div>
+      </div>
+      <p class="err" id="err"></p>
+
+      <div class="startbox">
+        <button class="primary" id="start">Начать игру</button>
+        <div id="rev-warn-wrap" class="rev-warning-wrap">
+          <div class="rev-warning">
+            <div class="rev-warning-text">Включена игра «наоборот»</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="game" class="hidden">
+      <div class="status">
+        <div>Ходов: <b id="moves">0</b> · Всего хамелеонов: <b id="total">0</b></div>
+        <div class="hint" id="modehint">Выберите цвет для хода</div>
+      </div>
+
+      <div class="cards" id="cards"></div>
+      <div id="win" class="win hidden"></div>
+
+      <div class="game-footer">
+        <p class="rules hidden" id="limitnote">Подсказка: на экране показывается не более 50 значков на цвет, точное
+          число указано цифрами.</p>
+        <div class="actions">
+          <button id="undo">Отменить ход</button>
+          <button id="restart-same">Начать заново</button>
+          <button id="finish" class="primary" hidden>Завершить игру</button>
+          <button id="restart">Новая игра</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <div class="tip" id="tip" role="tooltip"></div>
+  <div class="fly-layer" id="flylayer"></div>
+
+  <footer id="dynamic-footer">
+  </footer>
+
+  <div class="overlay hidden" id="ov">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="mt">
+      <h2 id="mt"></h2>
+      <div id="mb"></div>
+      <div class="modal-footer">
+        <button id="mc">Закрыть</button>
+        <label class="revbox hidden" id="modal-rev-label"><input type="checkbox" id="modal-rev"> Игра «наоборот»</label>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var PALETTE = [
+        { pl: "Белые", sg: "Белый", ins: "белыми", c: "#f5f5f5" },
+        { pl: "Серые", sg: "Серый", ins: "серыми", c: "#8a8f98" },
+        { pl: "Чёрные", sg: "Чёрный", ins: "чёрными", c: "#1a1a1a" },
+        { pl: "Оранжевые", sg: "Оранжевый", ins: "оранжевыми", c: "#fb8c00" },
+        { pl: "Жёлтые", sg: "Жёлтый", ins: "жёлтыми", c: "#f4d03f" },
+        { pl: "Бурые", sg: "Бурый", ins: "бурыми", c: "#8f6042" },
+        { pl: "Розовые", sg: "Розовый", ins: "розовыми", c: "#f48fb1" },
+        { pl: "Красные", sg: "Красный", ins: "красными", c: "#e53935" },
+        { pl: "Малиновые", sg: "Малиновый", ins: "малиновыми", c: "#b23670" },
+        { pl: "Салатовые", sg: "Салатовый", ins: "салатовыми", c: "#36ff00" },
+        { pl: "Зелёные", sg: "Зелёный", ins: "зелёными", c: "#5ccb6e" },
+        { pl: "Лагуновые", sg: "Лагуновый", ins: "лагуновыми", c: "#24522b" },
+        { pl: "Голубые", sg: "Голубой", ins: "голубыми", c: "#5bc0eb" },
+        { pl: "Синие", sg: "Синий", ins: "синими", c: "#1e5bd8" },
+        { pl: "Фиолетовые", sg: "Фиолетовый", ins: "фиолетовыми", c: "#7b3fa0" }
+      ];
+
+      var slot = [1, 5, 8];
+
+      var NAMES = [], COLORS = [], GEN = [];
+      var MAX_ICONS = 50;
+      var initialCounts = [], counts = [0, 0, 0], history = [], moves = 0, over = false, reverse = false, finished = false;
+      var isAnimating = false;
+
+      var $ = function (id) { return document.getElementById(id) };
+
+      $("modal-rev").checked = false;
+
+      $("n0").value = 13;
+      $("n1").value = 15;
+      $("n2").value = 17;
+
+      function readInput() {
+        var v = [];
+        for (var i = 0; i < 3; i++) {
+          var raw = $("n" + i).value.trim();
+          if (raw === "" || !/^\d+$/.test(raw)) return { error: "Введите целые неотрицательные числа во все три поля." };
+          var n = parseInt(raw, 10);
+          if (n > 100000) return { error: "Слишком большое число (максимум 100000)." };
+          v.push(n);
+        }
+        if (v[0] + v[1] + v[2] === 0) return { error: "Нужен хотя бы один хамелеон." };
+        return { values: v };
+      }
+
+      function isOver(c) {
+        var nz = 0; for (var i = 0; i < 3; i++) if (c[i] > 0) nz++;
+        return nz <= 1;
+      }
+
+      function start() {
+        var r = readInput();
+        if (r.error) { $("err").textContent = r.error; return; }
+
+        if (!$("modal-rev").checked && isOver(r.values)) {
+          $("err").textContent = "Эта позиция уже выигрышная. Измените количество хамелеонов или включите режим «наоборот» в меню настройки.";
+          return;
+        }
+
+        $("err").textContent = "";
+        counts = r.values.slice();
+        initialCounts = counts.slice();
+        history = []; moves = 0; reverse = $("modal-rev").checked; finished = false;
+        NAMES = slot.map(function (id) { return PALETTE[id].pl; });
+        COLORS = slot.map(function (id) { return PALETTE[id].c; });
+        GEN = slot.map(function (id) { return PALETTE[id].ins; });
+
+        document.body.classList.add("playing");
+        $("game-bg").style.backgroundImage = "linear-gradient(to right, " + COLORS[0] + ", " + COLORS[1] + ", " + COLORS[2] + ")";
+        $("game-bg").classList.remove("hidden");
+
+        render();
+        hideSection($("setup"), function () { showSection($("game")); });
+      }
+
+      function hideSection(el, cb) {
+        el.classList.remove("enter"); el.classList.add("leaving");
+        setTimeout(function () {
+          el.classList.add("hidden"); el.classList.remove("leaving");
+          if (cb) cb();
+        }, 220);
+      }
+      function showSection(el) {
+        el.classList.remove("hidden", "enter"); void el.offsetWidth; el.classList.add("enter");
+      }
+
+      function canMove(i) {
+        if (reverse) return counts[i] >= 2;
+        for (var j = 0; j < 3; j++) if (j !== i && counts[j] < 1) return false;
+        return true;
+      }
+
+      function hasMoves() {
+        return canMove(0) || canMove(1) || canMove(2);
+      }
+
+      function getSlotPosition(cardIdx, itemIndex) {
+        var cards = $("cards").children;
+        if (!cards[cardIdx]) return { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+        var herd = cards[cardIdx].querySelector(".herd");
+
+        itemIndex = Math.min(itemIndex, MAX_ICONS - 1);
+        var svgs = herd.querySelectorAll("svg");
+
+        if (itemIndex < svgs.length) {
+          var r = svgs[itemIndex].getBoundingClientRect();
+          return { x: r.left, y: r.top };
+        }
+
+        var hr = herd.getBoundingClientRect();
+        var cols = Math.max(1, Math.floor((hr.width + 2) / 36));
+        var row = Math.floor(itemIndex / cols);
+        var col = itemIndex % cols;
+        return {
+          x: hr.left + col * 36,
+          y: hr.top + row * 28
+        };
+      }
+
+      function extractSourceCham(cardIdx, offsetFromEnd) {
+        var cards = $("cards").children;
+        if (!cards[cardIdx]) return { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+        var herd = cards[cardIdx].querySelector(".herd");
+        var svgs = herd.querySelectorAll("svg");
+        offsetFromEnd = offsetFromEnd || 0;
+        var targetIdx = svgs.length - 1 - offsetFromEnd;
+
+        if (targetIdx >= 0 && svgs[targetIdx]) {
+          var targetSvg = svgs[targetIdx];
+          var r = targetSvg.getBoundingClientRect();
+          targetSvg.style.visibility = "hidden";
+          return { x: r.left, y: r.top };
+        }
+        return getSlotPosition(cardIdx, Math.max(0, counts[cardIdx] - 1 - offsetFromEnd));
+      }
+
+      function createFlyingCham(startPos, endPos, startCol, endCol, cb) {
+        var layer = $("flylayer");
+        var d = document.createElement("div");
+        d.className = "flying-cham";
+        d.style.color = startCol;
+        d.style.left = startPos.x + "px";
+        d.style.top = startPos.y + "px";
+        d.style.transform = "scale(0.95)";
+        d.innerHTML = '<svg><use href="#cham"/></svg>';
+        layer.appendChild(d);
+
+        requestAnimationFrame(function () {
+          requestAnimationFrame(function () {
+            d.style.left = endPos.x + "px";
+            d.style.top = endPos.y + "px";
+            d.style.color = endCol;
+            d.style.transform = "scale(1.15)";
+          });
+        });
+
+        setTimeout(function () {
+          d.remove();
+          if (cb) cb();
+        }, 550);
+      }
+
+      function animateStep(chosenIdx, isUndo, onComplete) {
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+          onComplete(); return;
+        }
+        var others = [0, 1, 2].filter(function (x) { return x !== chosenIdx; });
+        var remaining = 2;
+        function checkDone() {
+          remaining--;
+          if (remaining <= 0) onComplete();
+        }
+
+        if (!reverse) {
+          if (!isUndo) {
+            var curCount = Math.min(counts[chosenIdx], MAX_ICONS);
+            others.forEach(function (srcIdx, i) {
+              var startPos = extractSourceCham(srcIdx, 0);
+              var endPos = getSlotPosition(chosenIdx, curCount + i);
+              createFlyingCham(startPos, endPos, COLORS[srcIdx], COLORS[chosenIdx], checkDone);
+            });
+          } else {
+            others.forEach(function (destIdx, i) {
+              var startPos = extractSourceCham(chosenIdx, i);
+              var endPos = getSlotPosition(destIdx, Math.min(counts[destIdx], MAX_ICONS));
+              createFlyingCham(startPos, endPos, COLORS[chosenIdx], COLORS[destIdx], checkDone);
+            });
+          }
+        } else {
+          if (!isUndo) {
+            others.forEach(function (destIdx, i) {
+              var startPos = extractSourceCham(chosenIdx, i);
+              var endPos = getSlotPosition(destIdx, Math.min(counts[destIdx], MAX_ICONS));
+              createFlyingCham(startPos, endPos, COLORS[chosenIdx], COLORS[destIdx], checkDone);
+            });
+          } else {
+            var curCount = Math.min(counts[chosenIdx], MAX_ICONS);
+            others.forEach(function (srcIdx, i) {
+              var startPos = extractSourceCham(srcIdx, 0);
+              var endPos = getSlotPosition(chosenIdx, curCount + i);
+              createFlyingCham(startPos, endPos, COLORS[srcIdx], COLORS[chosenIdx], checkDone);
+            });
+          }
+        }
+      }
+
+      function move(i) {
+        if (over || !canMove(i) || isAnimating) return;
+        isAnimating = true;
+        animateStep(i, false, function () {
+          history.push({ counts: counts.slice(), chosen: i });
+          var next = counts.map(function (x, j) {
+            if (reverse) return j === i ? Math.max(0, x - 2) : x + 1;
+            return j === i ? x + 2 : Math.max(0, x - 1);
+          });
+          counts = next; moves++;
+          isAnimating = false;
+          render();
+        });
+      }
+
+      function undo() {
+        if (!history.length || isAnimating) return;
+        var last = history.pop();
+        var lastChosen = last.chosen;
+        isAnimating = true;
+        animateStep(lastChosen, true, function () {
+          counts = last.counts;
+          moves--;
+          finished = false;
+          isAnimating = false;
+          render();
+        });
+      }
+
+      function render() {
+        hideTip();
+        over = reverse ? finished : isOver(counts);
+        var total = counts[0] + counts[1] + counts[2];
+        $("moves").textContent = moves;
+        $("total").textContent = total;
+
+        var box = $("cards");
+
+        if (box.children.length === 0) {
+          for (var i = 0; i < 3; i++) {
+            var card = document.createElement("button");
+            card.className = "card";
+            card.id = "c-card-" + i;
+
+            var herd = document.createElement("div");
+            herd.className = "herd";
+            herd.id = "c-herd-" + i;
+
+            var num = document.createElement("div");
+            num.className = "big-number";
+            num.id = "c-num-" + i;
+
+            var nameDiv = document.createElement("div");
+            nameDiv.className = "color-name";
+            nameDiv.id = "c-name-" + i;
+
+            card.appendChild(herd);
+            card.appendChild(num);
+            card.appendChild(nameDiv);
+            box.appendChild(card);
+          }
+        }
+
+        for (var i = 0; i < 3; i++) {
+          (function (i) {
+            var card = $("c-card-" + i);
+            card.disabled = over || isAnimating;
+
+            var herd = $("c-herd-" + i);
+            herd.style.color = COLORS[i];
+            var shown = Math.min(counts[i], MAX_ICONS);
+            var html = "";
+            for (var k = 0; k < shown; k++) html += "<svg><use href=\"#cham\"/></svg>";
+            if (counts[i] > MAX_ICONS) html += "<span class=\"more\">+" + (counts[i] - MAX_ICONS) + "</span>";
+            herd.innerHTML = html;
+
+            var num = $("c-num-" + i);
+            if (num.textContent !== "" && parseInt(num.textContent, 10) !== counts[i]) {
+              num.classList.remove("num-update");
+              void num.offsetWidth;
+              num.classList.add("num-update");
+            }
+            num.style.color = COLORS[i];
+            num.textContent = counts[i];
+
+            var nameDiv = $("c-name-" + i);
+            nameDiv.style.color = COLORS[i];
+            nameDiv.textContent = NAMES[i].toLowerCase();
+
+            card.onmouseenter = null;
+            card.onmouseleave = null;
+            card.onfocus = null;
+            card.onblur = null;
+            card.onclick = null;
+            card.classList.remove("off");
+            card.removeAttribute("aria-disabled");
+
+            if (!over && !canMove(i)) {
+              var msg = reverse
+                ? "Ход невозможен: нужно минимум 2 хамелеона этого цвета"
+                : "Ход невозможен: у каждого из двух других цветов должен быть хотя бы 1 хамелеон";
+              card.classList.add("off"); card.setAttribute("aria-disabled", "true");
+              card.onmouseenter = function () { showTip(card, msg); };
+              card.onmouseleave = hideTip;
+              card.onfocus = function () { showTip(card, msg); };
+              card.onblur = hideTip;
+              card.onclick = function () { showTip(card, msg); clearTimeout(tipTimer); tipTimer = setTimeout(hideTip, 2500); };
+            } else {
+              card.onclick = function () { move(i); };
+            }
+          })(i);
+        }
+
+        var win = $("win");
+        if (over) {
+          if (win.classList.contains("hidden")) {
+            win.classList.remove("hidden", "enter"); void win.offsetWidth; win.classList.add("enter");
+          }
+          win.classList.toggle("rev", reverse);
+          if (reverse) {
+            win.textContent = "Игра наоборот завершена. Итог: " + NAMES[0] + " — " + counts[0] + ", " + NAMES[1] + " — " + counts[1] + ", " + NAMES[2] + " — " + counts[2] + ". Ходов сделано: " + moves + ".";
+          } else {
+            var idx = -1; for (var q = 0; q < 3; q++) if (counts[q] > 0) idx = q;
+            win.textContent = "Игра окончена: все хамелеоны стали " + GEN[idx] + ". Ходов сделано: " + moves + ".";
+          }
+        } else {
+          win.classList.add("hidden");
+        }
+
+        var noMoves = (history.length === 0);
+        $("undo").classList.toggle("off", noMoves || isAnimating);
+        $("restart-same").classList.toggle("off", noMoves || isAnimating);
+
+        $("limitnote").classList.toggle("hidden", !counts.some(function (c) { return c > MAX_ICONS; }));
+        $("finish").hidden = !reverse;
+        $("finish").disabled = over || isAnimating;
+
+        var base = reverse ? "Режим «наоборот»: нажмите на цвет для хода" : "Нажмите на цвет для хода";
+        $("modehint").textContent = (!over && !hasMoves())
+          ? (reverse ? "Возможных ходов нет — завершите игру или отмените ход" : "Возможных ходов нет — отмените ход или начните заново")
+          : base;
+      }
+
+      function buildFooter(items, openOnStartIdx) {
+        var footer = $("dynamic-footer");
+        footer.innerHTML = "";
+        var btns = [];
+
+        items.forEach(function (item) {
+          var btn = document.createElement("button");
+          btn.className = "fbtn";
+          if (item.title) {
+            btn.setAttribute("aria-label", item.title);
+            btn.addEventListener("mouseenter", function () { showTip(btn, item.title); });
+            btn.addEventListener("mouseleave", hideTip);
+            btn.addEventListener("focus", function () { showTip(btn, item.title); });
+            btn.addEventListener("blur", hideTip);
+          }
+          var img = document.createElement("img");
+          img.src = item.image;
+          img.alt = "";
+          img.dataset.f = item.title ? item.title.charAt(0) : "?";
+          img.addEventListener("error", function () { fallback(img); });
+          btn.appendChild(img);
+
+          btn.addEventListener("click", function () {
+            hideTip();
+            $("mt").textContent = item.title || "Информация";
+            $("mb").innerHTML = item.html || "";
+
+            $("modal-rev-label").classList.toggle("hidden", item.revers_button !== true);
+
+            var ov = $("ov"), mod = ov.querySelector(".modal");
+            ov.classList.remove("hidden", "closing");
+            ov.classList.add("opening");
+            mod.className = "modal in";
+            modalClosing = false;
+          });
+          footer.appendChild(btn);
+          btns.push(btn);
+        });
+
+        if (openOnStartIdx !== undefined && btns[openOnStartIdx]) {
+          setTimeout(function () {
+            btns[openOnStartIdx].click();
+          }, 100);
+        }
+      }
+
+      var fallbackConfig = [
+        { "title": "Об игре", "image": "assets/about.png", "html": "<p>«Хамелеоны» — небольшая логическая мини-игра по мотивам классической головоломки о хамелеонах, меняющих цвет.</p><p>Игра работает прямо в браузере, ничего устанавливать не нужно.</p>", "revers_button": true },
+        { "title": "Правила", "image": "assets/rules.png", "html": "<p>В начале введите количество хамелеонов каждого из трёх цветов. Выберите цвета из палитры.</p><p><b>Обычная игра.</b> Выбираете цвет: его становится на 2 больше, двух других — на 1 меньше.</p><p><b>Игра «наоборот».</b> Выбранный цвет уменьшается на 2, остальные увеличиваются на 1.</p>", "revers_button": false },
+        { "title": "Создатель", "image": "assets/personal.png", "html": "<p><a href=\"#\" target=\"_blank\">Перейти на сайт создателя</a></p>", "revers_button": false }
+      ];
+
+      fetch("config.json")
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+          if (data && data.footer) {
+            buildFooter(data.footer, data.open_on_start);
+          }
+        })
+        .catch(function (e) {
+          console.warn("Не удалось загрузить config.json. Используем резервный конфиг.", e);
+          buildFooter(fallbackConfig, 0);
+        });
+
+      var modalClosing = false;
+      function closeModal(dir) {
+        var ov = $("ov"), mod = ov.querySelector(".modal");
+        if (ov.classList.contains("hidden") || modalClosing) return;
+        modalClosing = true;
+        ov.classList.add("closing");
+        mod.className = "modal out-" + (dir || "up");
+        setTimeout(function () {
+          ov.classList.add("hidden");
+          ov.classList.remove("closing", "opening");
+          mod.className = "modal";
+          modalClosing = false;
+        }, 350);
+      }
+      function fallback(img) {
+        if (!img.parentNode) return;
+        var s = document.createElement("span"); s.textContent = img.dataset.f; img.replaceWith(s);
+      }
+      $("mc").addEventListener("click", function () { closeModal("up"); });
+      $("ov").addEventListener("click", function (e) {
+        if (e.target === this) {
+          var dirs = ["up", "down", "left", "right"];
+          closeModal(dirs[Math.floor(Math.random() * dirs.length)]);
+        }
+      });
+      document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeModal(); });
+
+      function renderSetup() {
+        for (var i = 0; i < 3; i++) {
+          (function (i) {
+            var p = PALETTE[slot[i]];
+
+            var dot = $("dot" + i);
+            dot.style.color = p.c;
+            dot.innerHTML = '<svg><use href="#cham"/></svg>';
+
+            var sn = $("sn" + i);
+            if (sn.textContent !== p.pl) {
+              if (!sn.textContent) {
+                sn.textContent = p.pl;
+              } else {
+                sn.classList.remove("text-blur-in");
+                sn.classList.add("text-blur-out");
+                setTimeout((function (el, val) {
+                  return function () {
+                    el.textContent = val;
+                    el.classList.remove("text-blur-out");
+                    void el.offsetWidth;
+                    el.classList.add("text-blur-in");
+                  };
+                })(sn, p.pl), 200);
+              }
+            }
+
+            var box = $("pal" + i); box.innerHTML = "";
+
+            for (var g = 0; g < 5; g++) {
+              var colDiv = document.createElement("div");
+              colDiv.className = "col";
+              var owner = -1;
+              for (var j = 0; j < 3; j++) if (j !== i && Math.floor(slot[j] / 3) === g) owner = j;
+
+              if (owner >= 0) {
+                colDiv.classList.add("taken-group");
+                colDiv.addEventListener("mouseenter", function () { showTip(this); });
+                colDiv.addEventListener("mouseleave", hideTip);
+              }
+
+              for (var k = 0; k < 3; k++) {
+                var id = g * 3 + k;
+                var col = PALETTE[id];
+                var b = document.createElement("button");
+                b.type = "button"; b.className = "sw" + (id === slot[i] ? " sel" : "");
+                b.style.color = col.c;
+                b.setAttribute("aria-label", col.sg);
+                b.innerHTML = '<svg><use href="#cham"/></svg>';
+
+                if (owner >= 0) {
+                  b.classList.add("taken");
+                  b.removeAttribute("title");
+                  b.addEventListener("focus", function () { showTip(colDiv); });
+                  b.addEventListener("blur", hideTip);
+                  b.addEventListener("click", function () {
+                    showTip(colDiv); clearTimeout(tipTimer); tipTimer = setTimeout(hideTip, 2500);
+                  });
+                b.addEventListener("dblclick", (function (id, owner_idx) {
+                return function () {
+                  var old = slot[i]; slot[i] = id; slot[owner_idx] = old;
+                  closePops(); renderSetup();
+                };
+              })(id, owner));
+                } else {
+                  b.addEventListener("mouseenter", (function (name) { return function () { showTip(this, name); }; })(col.sg));
+                  b.addEventListener("mouseleave", hideTip);
+                  b.addEventListener("focus", (function (name) { return function () { showTip(this, name); }; })(col.sg));
+                  b.addEventListener("blur", hideTip);
+                  b.addEventListener("click", (function (id) {
+                    return function () {
+                      slot[i] = id;
+                      try { localStorage.setItem('cham-colors', JSON.stringify(slot)); } catch (e) { }
+                      closePops(); renderSetup();
+                    };
+                  })(id));
+                }
+                colDiv.appendChild(b);
+              }
+              box.appendChild(colDiv);
+            }
+          })(i);
+        }
+      }
+
+      [0, 1, 2].forEach(function (i) {
+        var inp = $("n" + i), wrap = document.createElement("div");
+        wrap.className = "num";
+        inp.parentNode.insertBefore(wrap, inp);
+        function mk(txt, label, d) {
+          var b = document.createElement("button");
+          b.type = "button"; b.className = "step"; b.textContent = txt; b.setAttribute("aria-label", label);
+          b.addEventListener("click", function () {
+            var v = parseInt(inp.value, 10); if (isNaN(v)) v = 0;
+            inp.value = Math.max(0, v + d);
+            $("err").textContent = "";
+          });
+          return b;
+        }
+        wrap.appendChild(mk("−", "Меньше", -1));
+        wrap.appendChild(inp);
+        wrap.appendChild(mk("+", "Больше", 1));
+      });
+
+      var themeBtn = $("themebtn");
+      function currentTheme() {
+        var t = document.documentElement.getAttribute("data-theme");
+        if (t) return t;
+        return (window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches) ? "dark" : "light";
+      }
+      var themeT = null;
+      function applyTheme(t, save) {
+        if (save) {
+          var de = document.documentElement; de.classList.add("theming");
+          clearTimeout(themeT); themeT = setTimeout(function () { de.classList.remove("theming"); }, 500);
+        }
+        document.documentElement.setAttribute("data-theme", t);
+        themeBtn.textContent = t === "dark" ? "☀️" : "🌙";
+        themeBtn.title = t === "dark" ? "Включить светлую тему" : "Включить тёмную тему";
+        if (save) { try { localStorage.setItem("cham-theme", t); } catch (e) { } }
+      }
+      var savedTheme = null;
+      try { savedTheme = localStorage.getItem("cham-theme"); } catch (e) { }
+      if (savedTheme === "light" || savedTheme === "dark") applyTheme(savedTheme, false); else applyTheme(currentTheme(), false);
+      themeBtn.addEventListener("click", function () { applyTheme(currentTheme() === "dark" ? "light" : "dark", true); });
+
+      var tipTimer = null;
+      function showTip(el, text) {
+        var t = $("tip");
+        t.textContent = text || "Этот оттенок уже занят, кликните дважды чтобы поменять местами";
+        var r = el.getBoundingClientRect(), w = t.offsetWidth, h = t.offsetHeight;
+        var left = Math.max(8, Math.min(window.innerWidth - w - 8, r.left + r.width / 2 - w / 2));
+        var top = r.top - h - 8; if (top < 8) top = r.bottom + 8;
+        t.style.left = left + "px"; t.style.top = top + "px";
+        t.classList.add("show");
+      }
+      function hideTip() { $("tip").classList.remove("show"); }
+      function closePops() {
+        hideTip();
+        for (var i = 0; i < 3; i++) $("pal" + i).classList.remove("open");
+      }
+      [0, 1, 2].forEach(function (i) {
+        $("dot" + i).addEventListener("click", function () {
+          var p = $("pal" + i), wasClosed = !p.classList.contains("open");
+          closePops();
+          if (wasClosed) p.classList.add("open");
+        });
+      });
+      document.addEventListener("click", function (e) {
+        if (!e.target.closest(".slot")) closePops();
+      });
+      document.addEventListener("keydown", function (e) { if (e.key === "Escape") closePops(); });
+      renderSetup();
+
+      function attachNoMovesTip(btnId) {
+        var btn = $(btnId);
+        btn.addEventListener("mouseenter", function () {
+          if (history.length === 0 && !isAnimating) showTip(btn, "Ещё не сделано ни одного хода");
+        });
+        btn.addEventListener("mouseleave", hideTip);
+        btn.addEventListener("focus", function () {
+          if (history.length === 0 && !isAnimating) showTip(btn, "Ещё не сделано ни одного хода");
+        });
+        btn.addEventListener("blur", hideTip);
+      }
+      attachNoMovesTip("undo");
+      attachNoMovesTip("restart-same");
+
+      var revChars = [];
+      (function () {
+        var tag = $("revtag"), txt = " (наоборот)";
+        for (var k = 0; k < txt.length; k++) {
+          var s = document.createElement("span"); s.className = "ch"; s.textContent = txt.charAt(k);
+          tag.appendChild(s); revChars.push(s);
+        }
+      })();
+      var revTimers = [];
+      function setRevTag(on) {
+        var n = revChars.length;
+        revTimers.forEach(clearTimeout); revTimers = [];
+        revChars.forEach(function (s, i) {
+          var d = (on ? i : n - 1 - i) * 50;
+          revTimers.push(setTimeout(function () { s.classList.toggle("on", on); }, d));
+        });
+      }
+
+      $("modal-rev").addEventListener("change", function () {
+        $("rev-warn-wrap").classList.toggle("show", this.checked);
+        $("start").classList.toggle("rev-mode-btn", this.checked);
+        setRevTag(this.checked);
+      });
+
+      $("start").addEventListener("click", start);
+      ["n0", "n1", "n2"].forEach(function (id) {
+        $(id).addEventListener("keydown", function (e) { if (e.key === "Enter") start(); });
+      });
+
+      $("undo").addEventListener("click", function () {
+        if (history.length === 0 || isAnimating) {
+          if (history.length === 0 && !isAnimating) {
+            showTip(this, "Ещё не сделано ни одного хода");
+            clearTimeout(tipTimer); tipTimer = setTimeout(hideTip, 2500);
+          }
+          return;
+        }
+        undo();
+      });
+
+      $("restart-same").addEventListener("click", function () {
+        if (history.length === 0 || isAnimating) {
+          if (history.length === 0 && !isAnimating) {
+            showTip(this, "Ещё не сделано ни одного хода");
+            clearTimeout(tipTimer); tipTimer = setTimeout(hideTip, 2500);
+          }
+          return;
+        }
+        isAnimating = true;
+        hideTip();
+
+        for (var i = 0; i < 3; i++) {
+          var herd = $("c-herd-" + i);
+          if (herd) herd.style.opacity = "0";
+        }
+
+        setTimeout(function () {
+          counts = initialCounts.slice();
+          history = [];
+          moves = 0;
+          finished = false;
+          render();
+
+          for (var i = 0; i < 3; i++) {
+            var herd = $("c-herd-" + i);
+            if (herd) herd.style.opacity = "1";
+          }
+
+          setTimeout(function () {
+            isAnimating = false;
+            render();
+          }, 300);
+        }, 300);
+      });
+
+      $("finish").addEventListener("click", function () { finished = true; render(); });
+
+      $("restart").addEventListener("click", function () {
+        document.body.classList.remove("playing");
+        $("limitnote").classList.add("hidden");
+        $("game-bg").classList.add("hidden");
+        hideSection($("game"), function () {
+          showSection($("setup"));
+        });
+      });
+    })();
+  </script>
+</body>
+
+</html>
