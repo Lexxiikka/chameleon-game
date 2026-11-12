@@ -327,7 +327,70 @@
 
     .hint {
       font-size: .85rem;
-      color: var(--muted)
+      color: var(--muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .hint.warn-red {
+      color: #d92b2b;
+      font-weight: 600;
+    }
+
+    .hint.warn-orange {
+      color: #e67300;
+      font-weight: 600;
+    }
+
+    .hint.warn-blue {
+      color: #1e5bd8;
+      font-weight: 600;
+    }
+
+    .hint.warn-lagoon {
+      color: #24522b;
+      font-weight: 600;
+    }
+
+    @media (prefers-color-scheme:dark) {
+      :root:not([data-theme="light"]) .hint.warn-red {
+        color: #ff6b6b;
+      }
+
+      :root:not([data-theme="light"]) .hint.warn-orange {
+        color: #ffa726;
+      }
+
+      :root:not([data-theme="light"]) .hint.warn-blue {
+        color: #6ea8fe;
+      }
+
+      :root:not([data-theme="light"]) .hint.warn-lagoon {
+        color: #489c56;
+      }
+    }
+
+    :root[data-theme="dark"] .hint.warn-red {
+      color: #ff6b6b;
+    }
+
+    :root[data-theme="dark"] .hint.warn-orange {
+      color: #ffa726;
+    }
+
+    :root[data-theme="dark"] .hint.warn-blue {
+      color: #6ea8fe;
+    }
+
+    :root[data-theme="dark"] .hint.warn-lagoon {
+      color: #489c56;
+    }
+
+    .warn-icon {
+      width: 18px;
+      height: 18px;
+      flex: none;
     }
 
     @keyframes numUpdate {
@@ -501,6 +564,56 @@
 
     .pop .col.taken-group:hover {
       border-color: #d33
+    }
+
+    .color-modal-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-top: 6px;
+    }
+
+    .color-modal-row {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--bg);
+    }
+
+    .color-modal-head {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+    }
+
+    .color-modal-head svg {
+      width: 34px;
+      height: 26px;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
+    }
+
+    .color-modal-pal {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .color-modal-pal .col {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      border: 2px solid transparent;
+      border-radius: 18px;
+      padding: 2px;
+      transition: border-color .2s ease;
+    }
+
+    .color-modal-pal .col.taken-group:hover {
+      border-color: #d33;
     }
 
     .tip {
@@ -766,7 +879,7 @@
     .tip {
       position: fixed;
       z-index: 60;
-      max-width: 240px;
+      max-width: 260px;
       background: #222;
       color: #fff;
       font-size: .85rem;
@@ -782,6 +895,43 @@
       flex-direction: column;
       align-items: center;
       margin-top: 10px;
+    }
+
+    .fast-game-outer {
+      display: flex;
+      justify-content: center;
+      margin-top: 18px;
+    }
+
+    .allow-undo-row {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin-top: 12px;
+    }
+
+    .help-badge {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 1.5px solid var(--muted);
+      background: transparent;
+      color: var(--muted);
+      font-size: .78rem;
+      font-weight: 700;
+      line-height: 1;
+      padding: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: help;
+      flex: none;
+    }
+
+    .help-badge:hover,
+    .help-badge:focus-visible {
+      border-color: var(--accent);
+      color: var(--accent);
     }
 
     .rev-warning-wrap {
@@ -832,6 +982,11 @@
       cursor: pointer
     }
 
+    .revbox:has(input:disabled) {
+      opacity: .6;
+      cursor: not-allowed;
+    }
+
     .revbox input {
       -webkit-appearance: none;
       appearance: none;
@@ -845,6 +1000,10 @@
       display: grid;
       place-content: center;
       cursor: pointer
+    }
+
+    .revbox input:disabled {
+      cursor: not-allowed;
     }
 
     .revbox input:checked {
@@ -965,7 +1124,59 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
       margin-top: 18px;
+    }
+
+    .warn-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #d92b2b;
+    }
+
+    .warn-title.info-mode {
+      color: var(--accent);
+    }
+
+    @media (prefers-color-scheme:dark) {
+      :root:not([data-theme="light"]) .warn-title {
+        color: #ff6b6b;
+      }
+
+      :root:not([data-theme="light"]) .warn-title.info-mode {
+        color: var(--accent);
+      }
+    }
+
+    :root[data-theme="dark"] .warn-title {
+      color: #ff6b6b;
+    }
+
+    :root[data-theme="dark"] .warn-title.info-mode {
+      color: var(--accent);
+    }
+
+    .warn-details {
+      margin-top: 8px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: var(--bg);
+      border: 1px solid var(--line);
+      font-size: .92rem;
+    }
+
+    .warn-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+
+    .warn-actions .spacer {
+      margin-right: auto;
     }
   </style>
 </head>
@@ -992,38 +1203,53 @@
         <circle cx="34.5" cy="11" r="3.2" fill="#fff" />
         <circle cx="35" cy="11" r="1.4" fill="#111" />
       </symbol>
+      <symbol id="warn-tri" viewBox="0 0 24 24">
+        <path d="M12 3L22 20H2L12 3Z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round" />
+        <line x1="12" y1="9.5" x2="12" y2="14.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" />
+        <circle cx="12" cy="17.5" r="1.2" fill="currentColor" />
+      </symbol>
     </svg>
 
-    <section id="setup" class="panel">
-      <div class="fields">
-        <div class="slot">
-          <div class="slothead"><button type="button" class="dotbtn" id="dot0" aria-label="Выбрать цвет"
-              title="Выбрать цвет"></button><span id="sn0"></span></div><label><input type="number" id="n0" min="0"
-              step="1" value="13"></label>
-          <div class="pop" id="pal0"></div>
-        </div>
-        <div class="slot">
-          <div class="slothead"><button type="button" class="dotbtn" id="dot1" aria-label="Выбрать цвет"
-              title="Выбрать цвет"></button><span id="sn1"></span></div><label><input type="number" id="n1" min="0"
-              step="1" value="15"></label>
-          <div class="pop" id="pal1"></div>
-        </div>
-        <div class="slot">
-          <div class="slothead"><button type="button" class="dotbtn" id="dot2" aria-label="Выбрать цвет"
-              title="Выбрать цвет"></button><span id="sn2"></span></div><label><input type="number" id="n2" min="0"
-              step="1" value="17"></label>
-          <div class="pop" id="pal2"></div>
-        </div>
-      </div>
-      <p class="err" id="err"></p>
-
-      <div class="startbox">
-        <button class="primary" id="start">Начать игру</button>
-        <div id="rev-warn-wrap" class="rev-warning-wrap">
-          <div class="rev-warning">
-            <div class="rev-warning-text">Включена игра «наоборот»</div>
+    <section id="setup">
+      <div class="panel">
+        <div class="fields">
+          <div class="slot">
+            <div class="slothead"><button type="button" class="dotbtn" id="dot0" aria-label="Выбрать цвет"
+                title="Выбрать цвет"></button><span id="sn0"></span></div><label><input type="number" id="n0" min="0"
+                step="1" value="13"></label>
+            <div class="pop" id="pal0"></div>
+          </div>
+          <div class="slot">
+            <div class="slothead"><button type="button" class="dotbtn" id="dot1" aria-label="Выбрать цвет"
+                title="Выбрать цвет"></button><span id="sn1"></span></div><label><input type="number" id="n1" min="0"
+                step="1" value="15"></label>
+            <div class="pop" id="pal1"></div>
+          </div>
+          <div class="slot">
+            <div class="slothead"><button type="button" class="dotbtn" id="dot2" aria-label="Выбрать цвет"
+                title="Выбрать цвет"></button><span id="sn2"></span></div><label><input type="number" id="n2" min="0"
+                step="1" value="17"></label>
+            <div class="pop" id="pal2"></div>
           </div>
         </div>
+        <p class="err" id="err"></p>
+
+        <div class="startbox">
+          <button class="primary" id="start">Начать игру</button>
+          <div class="allow-undo-row">
+            <label class="revbox"><input type="checkbox" id="allow-undo"> Разрешить отмену ходов</label>
+            <button type="button" class="help-badge" id="undo-help" aria-label="Подсказка об отмене ходов">?</button>
+          </div>
+          <div id="rev-warn-wrap" class="rev-warning-wrap">
+            <div class="rev-warning">
+              <div class="rev-warning-text">Включена игра «наоборот»</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fast-game-outer">
+        <button type="button" id="setup-fast-game">Быстрая игра</button>
       </div>
     </section>
 
@@ -1042,6 +1268,8 @@
         <div class="actions">
           <button id="undo">Отменить ход</button>
           <button id="restart-same">Начать заново</button>
+          <button id="regenerate" class="hidden">Перегенерировать</button>
+          <button id="change-colors" type="button">Изменить цвета</button>
           <button id="finish" class="primary" hidden>Завершить игру</button>
           <button id="restart">Новая игра</button>
         </div>
@@ -1061,7 +1289,34 @@
       <div id="mb"></div>
       <div class="modal-footer">
         <button id="mc">Закрыть</button>
+        <button type="button" class="primary hidden" id="modal-fast-game">Быстрая игра</button>
         <label class="revbox hidden" id="modal-rev-label"><input type="checkbox" id="modal-rev"> Игра «наоборот»</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay hidden" id="warn-ov">
+    <div class="modal" role="alertdialog" aria-modal="true" aria-labelledby="wt">
+      <h2 id="wt" class="warn-title">
+        <svg class="warn-icon" aria-hidden="true"><use href="#warn-tri"/></svg>
+        <span id="wt-text">Победа невозможна</span>
+      </h2>
+      <p id="w-msg"></p>
+      <div id="w-details" class="warn-details hidden"></div>
+      <div class="warn-actions">
+        <button type="button" id="warn-more" class="spacer hidden">Подробнее</button>
+        <button type="button" id="warn-cancel">Отмена</button>
+        <button type="button" class="primary" id="warn-proceed">Всё равно начать игру</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay hidden" id="colors-ov">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="ct">
+      <h2 id="ct">Изменить цвета</h2>
+      <div id="colors-modal-body" class="color-modal-list"></div>
+      <div class="modal-footer">
+        <button type="button" class="primary" id="colors-done">Готово</button>
       </div>
     </div>
   </div>
@@ -1090,12 +1345,16 @@
 
       var NAMES = [], COLORS = [], GEN = [];
       var MAX_ICONS = 50;
-      var initialCounts = [], counts = [0, 0, 0], history = [], moves = 0, over = false, reverse = false, finished = false;
+      var initialCounts = [], counts = [0, 0, 0], history = [], moves = 0, over = false, reverse = false, finished = false, allowUndo = false, isFastGame = false;
+      var savedAllowUndo = false;
+      var pendingValues = null;
       var isAnimating = false;
 
       var $ = function (id) { return document.getElementById(id) };
 
       $("modal-rev").checked = false;
+      $("allow-undo").checked = false;
+      $("allow-undo").disabled = false;
 
       $("n0").value = 13;
       $("n1").value = 15;
@@ -1119,6 +1378,160 @@
         return nz <= 1;
       }
 
+      function isDefaultValues(v) {
+        return v[0] === 13 && v[1] === 15 && v[2] === 17;
+      }
+
+      function isSolvable(v) {
+        return Math.abs(v[0] - v[1]) % 3 === 0 ||
+               Math.abs(v[1] - v[2]) % 3 === 0 ||
+               Math.abs(v[0] - v[2]) % 3 === 0;
+      }
+
+      function generateSolvableValues() {
+        var byRem = [[], [], []];
+        for (var x = 3; x <= 30; x++) {
+          byRem[x % 3].push(x);
+        }
+
+        var r1 = Math.floor(Math.random() * 3);
+        var r2 = (r1 + 1 + Math.floor(Math.random() * 2)) % 3;
+
+        var validTriples = [];
+        var list1 = byRem[r1];
+        var list2 = byRem[r2];
+
+        for (var i = 0; i < list1.length; i++) {
+          for (var j = 0; j < list1.length; j++) {
+            if (i === j) continue;
+            for (var k = 0; k < list2.length; k++) {
+              var a = list1[i], b = list1[j], c = list2[k];
+              if (a + b + c <= 50) {
+                validTriples.push([a, b, c]);
+              }
+            }
+          }
+        }
+
+        var chosen = validTriples[Math.floor(Math.random() * validTriples.length)].slice();
+        for (var m = chosen.length - 1; m > 0; m--) {
+          var idx = Math.floor(Math.random() * (m + 1));
+          var tmp = chosen[m];
+          chosen[m] = chosen[idx];
+          chosen[idx] = tmp;
+        }
+        return chosen;
+      }
+
+      function setReverseMode(on) {
+        var revCb = $("modal-rev");
+        var undoCb = $("allow-undo");
+        revCb.checked = on;
+        if (on) {
+          savedAllowUndo = undoCb.checked;
+          undoCb.checked = true;
+          undoCb.disabled = true;
+        } else {
+          undoCb.disabled = false;
+          undoCb.checked = savedAllowUndo;
+        }
+        $("rev-warn-wrap").classList.toggle("show", on);
+        $("start").classList.toggle("rev-mode-btn", on);
+        setRevTag(on);
+      }
+
+      var warnClosing = false;
+      function openWarnModal(values, isDefaultMode) {
+        pendingValues = values.slice();
+        var titleEl = $("wt");
+        var titleText = $("wt-text");
+        var msgEl = $("w-msg");
+        var detailsEl = $("w-details");
+        var moreBtn = $("warn-more");
+
+        detailsEl.classList.add("hidden");
+        detailsEl.innerHTML = "";
+
+        if (isDefaultMode) {
+          titleEl.classList.add("info-mode");
+          titleText.textContent = "Базовые значения (13, 15 и 17)";
+          msgEl.textContent = "Эти числа взяты для примера — перед началом игры их рекомендуется изменить.";
+          detailsEl.innerHTML = "В исходном <a href=\"https://www.youtube.com/watch?v=p5PjgLijuG8\" target=\"_blank\" rel=\"noopener\">видео на YouTube</a> стартовые числа 13, 15 и 17 были условием математической загадки, ответ в которой — <b>решение невозможно</b> (разность между какими-либо двумя кучами должна быть кратна 3).";
+          moreBtn.classList.remove("hidden");
+        } else {
+          titleEl.classList.remove("info-mode");
+          titleText.textContent = "Победа невозможна";
+          msgEl.textContent = "При таком количестве хамелеонов победить математически невозможно: разность между какими-либо двумя кучами должна быть кратна 3.";
+          moreBtn.classList.add("hidden");
+        }
+
+        var ov = $("warn-ov"), mod = ov.querySelector(".modal");
+        ov.classList.remove("hidden", "closing");
+        ov.classList.add("opening");
+        mod.className = "modal in";
+        warnClosing = false;
+      }
+
+      function closeWarnModal(cb) {
+        var ov = $("warn-ov"), mod = ov.querySelector(".modal");
+        if (ov.classList.contains("hidden") || warnClosing) return;
+        warnClosing = true;
+        ov.classList.add("closing");
+        mod.className = "modal out-up";
+        setTimeout(function () {
+          ov.classList.add("hidden");
+          ov.classList.remove("closing", "opening");
+          mod.className = "modal";
+          warnClosing = false;
+          if (cb) cb();
+        }, 350);
+      }
+
+      function syncGameColors() {
+        NAMES = slot.map(function (id) { return PALETTE[id].pl; });
+        COLORS = slot.map(function (id) { return PALETTE[id].c; });
+        GEN = slot.map(function (id) { return PALETTE[id].ins; });
+        $("game-bg").style.backgroundImage = "linear-gradient(to right, " + COLORS[0] + ", " + COLORS[1] + ", " + COLORS[2] + ")";
+      }
+
+      function applyGameModeUI() {
+        $("undo").classList.toggle("hidden", !allowUndo);
+        $("restart-same").classList.toggle("hidden", isFastGame);
+        $("regenerate").classList.toggle("hidden", !isFastGame);
+        $("restart").textContent = isFastGame ? "Новая игра со своими параметрами" : "Новая игра";
+      }
+
+      function launchGame(values, fastMode) {
+        $("err").textContent = "";
+        isFastGame = !!fastMode;
+        counts = values.slice();
+        initialCounts = counts.slice();
+        history = []; moves = 0; reverse = $("modal-rev").checked; finished = false;
+        allowUndo = reverse || $("allow-undo").checked;
+
+        applyGameModeUI();
+        syncGameColors();
+
+        document.body.classList.add("playing");
+        $("game-bg").classList.remove("hidden");
+
+        render();
+        hideSection($("setup"), function () { showSection($("game")); });
+      }
+
+      function startFastGame() {
+        var vals = generateSolvableValues();
+        for (var i = 0; i < 3; i++) {
+          $("n" + i).value = vals[i];
+        }
+        savedAllowUndo = false;
+        setReverseMode(false);
+        $("allow-undo").checked = false;
+        $("allow-undo").disabled = false;
+
+        launchGame(vals, true);
+      }
+
       function start() {
         var r = readInput();
         if (r.error) { $("err").textContent = r.error; return; }
@@ -1128,21 +1541,47 @@
           return;
         }
 
-        $("err").textContent = "";
-        counts = r.values.slice();
-        initialCounts = counts.slice();
-        history = []; moves = 0; reverse = $("modal-rev").checked; finished = false;
-        NAMES = slot.map(function (id) { return PALETTE[id].pl; });
-        COLORS = slot.map(function (id) { return PALETTE[id].c; });
-        GEN = slot.map(function (id) { return PALETTE[id].ins; });
+        if (!$("modal-rev").checked && isDefaultValues(r.values)) {
+          $("err").textContent = "";
+          openWarnModal(r.values, true);
+          return;
+        }
 
-        document.body.classList.add("playing");
-        $("game-bg").style.backgroundImage = "linear-gradient(to right, " + COLORS[0] + ", " + COLORS[1] + ", " + COLORS[2] + ")";
-        $("game-bg").classList.remove("hidden");
+        if (!$("modal-rev").checked && !isSolvable(r.values)) {
+          $("err").textContent = "";
+          openWarnModal(r.values, false);
+          return;
+        }
 
-        render();
-        hideSection($("setup"), function () { showSection($("game")); });
+        launchGame(r.values, false);
       }
+
+      $("modal-fast-game").addEventListener("click", function () {
+        closeModal("up");
+        startFastGame();
+      });
+
+      $("setup-fast-game").addEventListener("click", function () {
+        startFastGame();
+      });
+
+      $("warn-more").addEventListener("click", function () {
+        $("w-details").classList.remove("hidden");
+        this.classList.add("hidden");
+      });
+
+      $("warn-cancel").addEventListener("click", function () {
+        pendingValues = null;
+        closeWarnModal();
+      });
+
+      $("warn-proceed").addEventListener("click", function () {
+        var vals = pendingValues;
+        pendingValues = null;
+        closeWarnModal(function () {
+          if (vals) launchGame(vals, false);
+        });
+      });
 
       function hideSection(el, cb) {
         el.classList.remove("enter"); el.classList.add("leaving");
@@ -1291,7 +1730,7 @@
       }
 
       function undo() {
-        if (!history.length || isAnimating) return;
+        if (!allowUndo || !history.length || isAnimating) return;
         var last = history.pop();
         var lastChosen = last.chosen;
         isAnimating = true;
@@ -1412,10 +1851,23 @@
         $("finish").hidden = !reverse;
         $("finish").disabled = over || isAnimating;
 
-        var base = reverse ? "Режим «наоборот»: нажмите на цвет для хода" : "Нажмите на цвет для хода";
-        $("modehint").textContent = (!over && !hasMoves())
-          ? (reverse ? "Возможных ходов нет — завершите игру или отмените ход" : "Возможных ходов нет — отмените ход или начните заново")
-          : base;
+        var hintEl = $("modehint");
+        hintEl.classList.remove("warn-red", "warn-orange", "warn-blue", "warn-lagoon");
+        if (!over && !hasMoves()) {
+          hintEl.textContent = reverse
+            ? "Возможных ходов нет — завершите игру или отмените ход"
+            : "Возможных ходов нет — отмените ход или начните заново";
+        } else if (reverse) {
+          var isRightBlue = Math.floor(slot[2] / 3) === 4;
+          hintEl.classList.add(isRightBlue ? "warn-lagoon" : "warn-blue");
+          hintEl.innerHTML = '<svg class="warn-icon" aria-hidden="true"><use href="#warn-tri"/></svg><span>Включена игра «наоборот»</span>';
+        } else if (allowUndo) {
+          var isRightRed = Math.floor(slot[2] / 3) === 2;
+          hintEl.classList.add(isRightRed ? "warn-orange" : "warn-red");
+          hintEl.innerHTML = '<svg class="warn-icon" aria-hidden="true"><use href="#warn-tri"/></svg><span>Разрешена отмена ходов</span>';
+        } else {
+          hintEl.textContent = "Выберите цвет для хода";
+        }
       }
 
       function buildFooter(items, openOnStartIdx) {
@@ -1446,6 +1898,7 @@
             $("mb").innerHTML = item.html || "";
 
             $("modal-rev-label").classList.toggle("hidden", item.revers_button !== true);
+            $("modal-fast-game").classList.toggle("hidden", item.fast_game_button !== true);
 
             var ov = $("ov"), mod = ov.querySelector(".modal");
             ov.classList.remove("hidden", "closing");
@@ -1465,9 +1918,9 @@
       }
 
       var fallbackConfig = [
-        { "title": "Об игре", "image": "assets/about.png", "html": "<p>«Хамелеоны» — небольшая логическая мини-игра по мотивам классической головоломки о хамелеонах, меняющих цвет.</p><p>Игра работает прямо в браузере, ничего устанавливать не нужно.</p>", "revers_button": true },
-        { "title": "Правила", "image": "assets/rules.png", "html": "<p>В начале введите количество хамелеонов каждого из трёх цветов. Выберите цвета из палитры.</p><p><b>Обычная игра.</b> Выбираете цвет: его становится на 2 больше, двух других — на 1 меньше.</p><p><b>Игра «наоборот».</b> Выбранный цвет уменьшается на 2, остальные увеличиваются на 1.</p>", "revers_button": false },
-        { "title": "Создатель", "image": "assets/personal.png", "html": "<p><a href=\"#\" target=\"_blank\">Перейти на сайт создателя</a></p>", "revers_button": false }
+        { "title": "Об игре", "image": "assets/about.png", "html": "<p>«Хамелеоны» — небольшая логическая мини-игра по мотивам классической головоломки о хамелеонах, меняющих цвет.</p><p>Игра работает прямо в браузере, ничего устанавливать не нужно.</p>", "revers_button": true, "fast_game_button": true },
+        { "title": "Правила", "image": "assets/rules.png", "html": "<p>В начале введите количество хамелеонов каждого из трёх цветов. Выберите цвета из палитры.</p><p><b>Обычная игра.</b> Выбираете цвет: его становится на 2 больше, двух других — на 1 меньше.</p><p><b>Игра «наоборот».</b> Выбранный цвет уменьшается на 2, остальные увеличиваются на 1.</p>", "revers_button": false, "fast_game_button": false },
+        { "title": "Создатель", "image": "assets/personal.png", "html": "<p><a href=\"#\" target=\"_blank\">Перейти на сайт создателя</a></p>", "revers_button": false, "fast_game_button": false }
       ];
 
       fetch("config.json")
@@ -1507,7 +1960,131 @@
           closeModal(dirs[Math.floor(Math.random() * dirs.length)]);
         }
       });
-      document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeModal(); });
+
+      var colorsModalClosing = false;
+      function renderColorsModal() {
+        var body = $("colors-modal-body");
+        body.innerHTML = "";
+        for (var i = 0; i < 3; i++) {
+          (function (i) {
+            var p = PALETTE[slot[i]];
+            var row = document.createElement("div");
+            row.className = "color-modal-row";
+
+            var head = document.createElement("div");
+            head.className = "color-modal-head";
+            head.style.color = p.c;
+            head.innerHTML = '<svg><use href="#cham"/></svg><span>' + p.pl + ' (' + counts[i] + ')</span>';
+            row.appendChild(head);
+
+            var pal = document.createElement("div");
+            pal.className = "color-modal-pal";
+
+            for (var g = 0; g < 5; g++) {
+              var colDiv = document.createElement("div");
+              colDiv.className = "col";
+              var owner = -1;
+              for (var j = 0; j < 3; j++) if (j !== i && Math.floor(slot[j] / 3) === g) owner = j;
+
+              if (owner >= 0) {
+                colDiv.classList.add("taken-group");
+                colDiv.addEventListener("mouseenter", function () { showTip(this); });
+                colDiv.addEventListener("mouseleave", hideTip);
+              }
+
+              for (var k = 0; k < 3; k++) {
+                var id = g * 3 + k;
+                var col = PALETTE[id];
+                var b = document.createElement("button");
+                b.type = "button";
+                b.className = "sw" + (id === slot[i] ? " sel" : "");
+                b.style.color = col.c;
+                b.setAttribute("aria-label", col.sg);
+                b.innerHTML = '<svg><use href="#cham"/></svg>';
+
+                if (owner >= 0) {
+                  b.classList.add("taken");
+                  b.addEventListener("focus", function () { showTip(colDiv); });
+                  b.addEventListener("blur", hideTip);
+                  b.addEventListener("click", function () {
+                    showTip(colDiv); clearTimeout(tipTimer); tipTimer = setTimeout(hideTip, 2500);
+                  });
+                  b.addEventListener("dblclick", (function (id, owner_idx) {
+                    return function () {
+                      var old = slot[i]; slot[i] = id; slot[owner_idx] = old;
+                      try { localStorage.setItem('cham-colors', JSON.stringify(slot)); } catch (e) { }
+                      hideTip();
+                      syncGameColors();
+                      render();
+                      renderSetup();
+                      renderColorsModal();
+                    };
+                  })(id, owner));
+                } else {
+                  b.addEventListener("mouseenter", (function (name) { return function () { showTip(this, name); }; })(col.sg));
+                  b.addEventListener("mouseleave", hideTip);
+                  b.addEventListener("focus", (function (name) { return function () { showTip(this, name); }; })(col.sg));
+                  b.addEventListener("blur", hideTip);
+                  b.addEventListener("click", (function (id) {
+                    return function () {
+                      slot[i] = id;
+                      try { localStorage.setItem('cham-colors', JSON.stringify(slot)); } catch (e) { }
+                      hideTip();
+                      syncGameColors();
+                      render();
+                      renderSetup();
+                      renderColorsModal();
+                    };
+                  })(id));
+                }
+                colDiv.appendChild(b);
+              }
+              pal.appendChild(colDiv);
+            }
+            row.appendChild(pal);
+            body.appendChild(row);
+          })(i);
+        }
+      }
+
+      function openColorsModal() {
+        if (isAnimating) return;
+        hideTip();
+        renderColorsModal();
+        var ov = $("colors-ov"), mod = ov.querySelector(".modal");
+        ov.classList.remove("hidden", "closing");
+        ov.classList.add("opening");
+        mod.className = "modal in";
+        colorsModalClosing = false;
+      }
+
+      function closeColorsModal() {
+        var ov = $("colors-ov"), mod = ov.querySelector(".modal");
+        if (ov.classList.contains("hidden") || colorsModalClosing) return;
+        colorsModalClosing = true;
+        hideTip();
+        ov.classList.add("closing");
+        mod.className = "modal out-up";
+        setTimeout(function () {
+          ov.classList.add("hidden");
+          ov.classList.remove("closing", "opening");
+          mod.className = "modal";
+          colorsModalClosing = false;
+        }, 350);
+      }
+
+      $("change-colors").addEventListener("click", openColorsModal);
+      $("colors-done").addEventListener("click", closeColorsModal);
+      $("colors-ov").addEventListener("click", function (e) {
+        if (e.target === this) closeColorsModal();
+      });
+
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape") {
+          closeModal();
+          closeColorsModal();
+        }
+      });
 
       function renderSetup() {
         for (var i = 0; i < 3; i++) {
@@ -1567,12 +2144,12 @@
                   b.addEventListener("click", function () {
                     showTip(colDiv); clearTimeout(tipTimer); tipTimer = setTimeout(hideTip, 2500);
                   });
-                b.addEventListener("dblclick", (function (id, owner_idx) {
-                return function () {
-                  var old = slot[i]; slot[i] = id; slot[owner_idx] = old;
-                  closePops(); renderSetup();
-                };
-              })(id, owner));
+                  b.addEventListener("dblclick", (function (id, owner_idx) {
+                    return function () {
+                      var old = slot[i]; slot[i] = id; slot[owner_idx] = old;
+                      closePops(); renderSetup();
+                    };
+                  })(id, owner));
                 } else {
                   b.addEventListener("mouseenter", (function (name) { return function () { showTip(this, name); }; })(col.sg));
                   b.addEventListener("mouseleave", hideTip);
@@ -1663,6 +2240,24 @@
       document.addEventListener("keydown", function (e) { if (e.key === "Escape") closePops(); });
       renderSetup();
 
+      var undoHelpBtn = $("undo-help");
+      function getUndoHelpText() {
+        var base = "Отмена ходов позволяет выиграть даже допустив критические ошибки, поэтому мы не рекомендуем вам её использовать, кроме тренировок и обучения.";
+        if ($("modal-rev").checked) {
+          base += " При включённой игре «наоборот» отмена ходов всегда разрешена.";
+        }
+        return base;
+      }
+      undoHelpBtn.addEventListener("mouseenter", function () { showTip(undoHelpBtn, getUndoHelpText()); });
+      undoHelpBtn.addEventListener("mouseleave", hideTip);
+      undoHelpBtn.addEventListener("focus", function () { showTip(undoHelpBtn, getUndoHelpText()); });
+      undoHelpBtn.addEventListener("blur", hideTip);
+      undoHelpBtn.addEventListener("click", function () {
+        showTip(undoHelpBtn, getUndoHelpText());
+        clearTimeout(tipTimer);
+        tipTimer = setTimeout(hideTip, 4000);
+      });
+
       function attachNoMovesTip(btnId) {
         var btn = $(btnId);
         btn.addEventListener("mouseenter", function () {
@@ -1696,9 +2291,7 @@
       }
 
       $("modal-rev").addEventListener("change", function () {
-        $("rev-warn-wrap").classList.toggle("show", this.checked);
-        $("start").classList.toggle("rev-mode-btn", this.checked);
-        setRevTag(this.checked);
+        setReverseMode(this.checked);
       });
 
       $("start").addEventListener("click", start);
@@ -1707,6 +2300,7 @@
       });
 
       $("undo").addEventListener("click", function () {
+        if (!allowUndo) return;
         if (history.length === 0 || isAnimating) {
           if (history.length === 0 && !isAnimating) {
             showTip(this, "Ещё не сделано ни одного хода");
@@ -1735,6 +2329,40 @@
 
         setTimeout(function () {
           counts = initialCounts.slice();
+          history = [];
+          moves = 0;
+          finished = false;
+          render();
+
+          for (var i = 0; i < 3; i++) {
+            var herd = $("c-herd-" + i);
+            if (herd) herd.style.opacity = "1";
+          }
+
+          setTimeout(function () {
+            isAnimating = false;
+            render();
+          }, 300);
+        }, 300);
+      });
+
+      $("regenerate").addEventListener("click", function () {
+        if (isAnimating) return;
+        isAnimating = true;
+        hideTip();
+
+        for (var i = 0; i < 3; i++) {
+          var herd = $("c-herd-" + i);
+          if (herd) herd.style.opacity = "0";
+        }
+
+        setTimeout(function () {
+          var vals = generateSolvableValues();
+          for (var k = 0; k < 3; k++) {
+            $("n" + k).value = vals[k];
+          }
+          counts = vals.slice();
+          initialCounts = vals.slice();
           history = [];
           moves = 0;
           finished = false;
